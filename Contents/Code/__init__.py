@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-from PMS import *
-from PMS.Objects import *
-from PMS.Shortcuts import *
-
 from vgtv import *
 
 VGTV_PREFIX = '/video/vgtv'

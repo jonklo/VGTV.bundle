@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-from PMS import *
-from PMS.Objects import *
-from PMS.Shortcuts import *
-
 from util import fix_chars
 
 BASE_URL_FEED = 'http://www.vgtv.no/api/'
@@ -26,13 +22,13 @@ def CategoriesMenu(sender, subcategories=None):
     if subcategories:
         for cat in subcategories:
             Log(cat)
-            dir.Append(Function(DirectoryItem(VideoListMenu, title=fix_chars(cat['title'])), id=cat['id']))
+            dir.Append(Function(DirectoryItem(VideoListMenu, title=cat['title']), id=cat['id']))
         return dir
     
     
     # Fetch all top level categories
     url = '%s?do=feed&action=categories' % BASE_URL_FEED
-    rss = XML.ElementFromURL(url, isHTML=True, cacheTime=CACHE_HTML_INTERVAL, encoding='utf-8')
+    rss = HTML.ElementFromURL(url, cacheTime=CACHE_HTML_INTERVAL, encoding='utf-8')
     categories = rss.xpath('//channel/categories/item')
     
     # Display error message if no categories are found
@@ -63,7 +59,8 @@ def VideoListMenu(sender, vtype='category', id=None):
     dir = MediaContainer(viewGroup='Details', title2=sender.itemTitle)
     
     url = '%s?do=feed&action=%s&value=%s&limit=25' % (BASE_URL_FEED, vtype, id)
-    rss = XML.ElementFromURL(url, isHTML=True, cacheTime=CACHE_HTML_INTERVAL, encoding='utf-8')
+    rss = HTML.ElementFromURL(url, cacheTime=CACHE_HTML_INTERVAL, encoding='utf-8')
+    
     videos = rss.xpath('//channel/item')
     
     # Display error message if no categories are found
@@ -71,7 +68,7 @@ def VideoListMenu(sender, vtype='category', id=None):
         return (MessageContainer(header=L('title'), message=L('noepisodes'), title1=L('title')))
         
     for item in videos:
-        title = fix_chars(item.xpath('./title/text()')[0])
+        title = item.xpath('./title/text()')[0]
         clip_id = item.xpath('./id/text()')[0]
         
         try:

@@ -17,7 +17,7 @@
     <key>CFBundleVersion</key>
     <string>1.0</string>
     <key>PlexFrameworkVersion</key>
-    <string>1</string>
+    <string>2</string>
     <key>PlexPluginMode</key>
     <string>AlwaysOn</string>
     <key>PlexClientPlatforms</key>
