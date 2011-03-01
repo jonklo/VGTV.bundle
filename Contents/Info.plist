@@ -25,7 +25,7 @@
 	<key>PlexPluginMode</key>
 	<string>AlwaysOn</string>
 	<key>PlexClientPlatforms</key>
-	<string>MacOSX</string>
+	<string>MacOSX,iOS,Android</string>
 	<key>PlexPluginConsoleLogging</key>
 	<string>0</string>
 	<key>PlexPluginDevMode</key>
