@@ -16,7 +16,7 @@ def CategoriesMenu(sender, subcategories=None):
     """
     Displays categories and sub categories from a feed.
     """
-    dir = MediaContainer(viewGroup='Details', title2=sender.itemTitle)
+    dir = MediaContainer(title2=sender.itemTitle)
     
     # Sub categories
     if subcategories:
@@ -56,7 +56,7 @@ def VideoListMenu(sender, vtype='category', id=None):
     """
     Displays a list of video clips.
     """
-    dir = MediaContainer(viewGroup='Details', title2=sender.itemTitle)
+    dir = MediaContainer(title2=sender.itemTitle, viewGroup='InfoList')
     
     url = '%s?do=feed&action=%s&value=%s&limit=25' % (BASE_URL_FEED, vtype, id)
     rss = HTML.ElementFromURL(url, cacheTime=CACHE_HTML_INTERVAL, encoding='utf-8')

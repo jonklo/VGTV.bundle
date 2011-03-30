@@ -13,12 +13,14 @@ def Start():
     """
     Plugin.AddPrefixHandler(VGTV_PREFIX, MainMenu, 'VGTV', ICON, ART)
     
-    Plugin.AddViewGroup("Details", viewMode="InfoList", mediaType="items")
+    Plugin.AddViewGroup("List", viewMode="List", mediaType="items")
+    Plugin.AddViewGroup("InfoList", viewMode="InfoList", mediaType="items")
     
     # Set defaults
     MediaContainer.content = 'Items'
     MediaContainer.art = R(ART)
     MediaContainer.title1 = 'VGTV'
+    MediaContainer.viewGroup = 'List'
     DirectoryItem.thumb = R(ICON)
 
 
@@ -27,7 +29,7 @@ def MainMenu():
     """
     Sets up the main menu. All the menu functions are in separate files.
     """
-    dir = MediaContainer(viewGroup="Details")
+    dir = MediaContainer()
     
     dir.Append(Function(DirectoryItem(CategoriesMenu, title=u'Alle kategorier')))
     dir.Append(Function(DirectoryItem(MostViewedMenu, title=u'Mest sett')))
