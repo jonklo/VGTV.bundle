@@ -31,8 +31,8 @@ def MainMenu():
     """
     dir = MediaContainer()
     
-    dir.Append(Function(DirectoryItem(CategoriesMenu, title=u'Alle kategorier')))
-    dir.Append(Function(DirectoryItem(MostViewedMenu, title=u'Mest sett')))
-    dir.Append(Function(DirectoryItem(RecentlyAddedMenu, title=u'Siste videoer')))
+    dir.Append(Function(DirectoryItem(CategoriesMenu, title='Alle kategorier')))
+    dir.Append(Function(DirectoryItem(MostViewedMenu, title='Mest sett')))
+    dir.Append(Function(DirectoryItem(RecentlyAddedMenu, title='Siste videoer')))
     
     return dir
