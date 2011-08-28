@@ -24,10 +24,13 @@
 	<array>
 		<string>Flash</string>
 	</array>
-	<key>PlexPluginConsoleLogging</key>
-	<string>0</string>
-	<key>PlexPluginDevMode</key>
-	<string>0</string>
+	<key>PlexClientCapabilities</key>
+	<dict>
+		<key>protocols</key>
+		<array>
+			<string>webkit</string>
+		</array>
+	</dict>
 	<key>PlexPluginMode</key>
 	<string>AlwaysOn</string>
 </dict>
