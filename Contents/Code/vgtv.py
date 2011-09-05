@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import re
 from util import fix_chars
 
 BASE_URL_FEED = 'http://www.vgtv.no/api/'
@@ -16,7 +17,7 @@ def CategoriesMenu(sender, subcategories=None):
     """
     Displays categories and sub categories from a feed.
     """
-    dir = MediaContainer(viewGroup='Details', title2=sender.itemTitle)
+    dir = MediaContainer(title2=sender.itemTitle)
     
     # Sub categories
     if subcategories:
@@ -24,11 +25,13 @@ def CategoriesMenu(sender, subcategories=None):
             Log(cat)
             dir.Append(Function(DirectoryItem(VideoListMenu, title=cat['title']), id=cat['id']))
         return dir
-    
-    
+
+
     # Fetch all top level categories
     url = '%s?do=feed&action=categories' % BASE_URL_FEED
-    rss = HTML.ElementFromURL(url, cacheTime=CACHE_HTML_INTERVAL, encoding='utf-8')
+    rss = HTTP.Request(url, cacheTime=CACHE_HTML_INTERVAL).content
+    rss = re.sub('&(?!amp;)', '&amp;', rss)
+    rss = HTML.ElementFromString(rss)
     categories = rss.xpath('//channel/categories/item')
     
     # Display error message if no categories are found
@@ -56,10 +59,10 @@ def VideoListMenu(sender, vtype='category', id=None):
     """
     Displays a list of video clips.
     """
-    dir = MediaContainer(viewGroup='Details', title2=sender.itemTitle)
+    dir = MediaContainer(title2=sender.itemTitle, viewGroup='InfoList')
     
     url = '%s?do=feed&action=%s&value=%s&limit=25' % (BASE_URL_FEED, vtype, id)
-    rss = HTML.ElementFromURL(url, cacheTime=CACHE_HTML_INTERVAL, encoding='utf-8')
+    rss = HTML.ElementFromURL(url, cacheTime=CACHE_HTML_INTERVAL)
     
     videos = rss.xpath('//channel/item')
     
@@ -97,7 +100,7 @@ def get_player_and_clip_url(id):
     Fetches and separates the player and clip urls.
     """
     url = '%s?do=playlist&id=%s' % (BASE_URL_FEED, id)
-    rss = XML.ElementFromURL(url, cacheTime=CACHE_HTML_INTERVAL, encoding='utf-8')
+    rss = XML.ElementFromURL(url, cacheTime=CACHE_HTML_INTERVAL)
     
     try:
         locations = rss.xpath('//ns1:track', namespaces=PLAYLIST_NAMESPACE)[0]
