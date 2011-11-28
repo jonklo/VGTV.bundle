@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
+import random
 import re
-from util import fix_chars
 
 BASE_URL_FEED = 'http://www.vgtv.no/api/'
 PLAYLIST_NAMESPACE = {'ns1': 'http://xspf.org/ns/0/'}
@@ -99,20 +99,18 @@ def get_player_and_clip_url(id):
     """
     Fetches and separates the player and clip urls.
     """
-    url = '%s?do=playlist&id=%s' % (BASE_URL_FEED, id)
-    rss = XML.ElementFromURL(url, cacheTime=CACHE_HTML_INTERVAL)
     
-    try:
-        locations = rss.xpath('//ns1:track', namespaces=PLAYLIST_NAMESPACE)[0]
-        location = locations.xpath('./ns1:location/text()', namespaces=PLAYLIST_NAMESPACE)[0]
+    url = 'http://www.vgtv.no/data/actions/videostatus/?id=%s' % id
     
-        # Extract the player and clip urls
-        player_url, clip_url = '/'.join(location.split('/')[0:4]), '/'.join(location.split('/')[4:])
-        Log('Player url: %s, clip url: %s' % (player_url, clip_url))
-        
-    except:
-        player_url, clip_url = None, None
-        Log('ERROR: could not fetch clip url for ID: %s' % id)
+    resp = JSON.ObjectFromURL(url)
+    paths = resp['formats']['rtmp']['mp4'][0]['paths']
+    
+    # Choose a random server
+    path = random.choice(paths)
+    
+    # Construct player and clip urls
+    player_url = 'rtmp://%s/%s' % (path['address'], path['application'])
+    clip_url = '%s/%s' % (path['path'], path['filename'])
+    Log('Player url: %s, clip url: %s' % (player_url, clip_url))
     
     return player_url, clip_url
-    
