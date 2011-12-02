@@ -89,7 +89,8 @@ def VideoListMenu(sender, vtype='category', id=None):
 
         player_url, clip_url = get_player_and_clip_url(clip_id)
 
-        dir.Append(RTMPVideoItem(url=player_url, clip=clip_url, title=title, summary=desc, thumb=Function(get_thumb, url=img_url)))
+        if player_url and clip_url:
+            dir.Append(RTMPVideoItem(url=player_url, clip=clip_url, title=title, summary=desc, thumb=Function(get_thumb, url=img_url)))
 
     return dir
 
@@ -107,20 +108,23 @@ def get_player_and_clip_url(id):
 
     resp = JSON.ObjectFromURL(url)
 
-    try:
-        paths = resp['formats']['rtmp']['mp4'][0]['paths']
-    except:
-        paths = resp['formats']['rtmp']['flv'][0]['paths']
+    if 'formats' in resp:
+        try:
+            paths = resp['formats']['rtmp']['mp4'][0]['paths']
+        except:
+            paths = resp['formats']['rtmp']['flv'][0]['paths']
 
-    # Choose a random server
-    path = random.choice(paths)
+        # Choose a random server
+        path = random.choice(paths)
 
-    # Construct player and clip urls
-    player_url = 'rtmp://%s/%s' % (path['address'], path['application'])
-    clip_url = '%s/%s' % (path['path'], path['filename'])
-    #Log('Player url: %s, clip url: %s' % (player_url, clip_url))
+        # Construct player and clip urls
+        player_url = 'rtmp://%s/%s' % (path['address'], path['application'])
+        clip_url = '%s/%s' % (path['path'], path['filename'])
+        #Log('Player url: %s, clip url: %s' % (player_url, clip_url))
 
-    return player_url, clip_url
+        return player_url, clip_url
+    else:
+        return [None, None]
 
 def get_thumb(url):
     if url:
